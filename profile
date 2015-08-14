@@ -1,7 +1,6 @@
-alias la='clear && ls -lh'
 alias grep='grep -s --exclude=\*.svn\*'
 
-case "`uname`" in
+case "`uname`" in 
     SunOS)
         TERM="dtterm";
         # setup grep as ggrep if it exists
@@ -17,6 +16,7 @@ case "`uname`" in
         ;;
     Linux)
         TERM="xterm-color";
+        # i hates colors
         alias ls='ls --color=none'
         ;;
     *)
@@ -25,7 +25,7 @@ case "`uname`" in
 esac
 export TERM;
 
-stty erase ^?
+stty erase 
 
 
 function set_alias {
@@ -45,7 +45,7 @@ set_alias vi  /usr/bin/vim
 set_alias vi  `which vim`
 
 #set command defaults
-alias getprofile="scp nobleclem@fatalexception.us:.profile ~/.profile && source ~/.profile"
+alias la='clear && ls -lh'
 
 # add hostname to terminal window
 echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
@@ -56,6 +56,7 @@ export PS1
 
 unset PATH
 for path_dir in $HOME/builds/bin\
+                $HOME/builds/packages/go/bin\
                 /usr/local/bin\
                 /sbin\
                 /bin\
@@ -85,23 +86,22 @@ do
 done
 export PATH
 
-BLOCKSIZE=K;    export BLOCKSIZE
-EDITOR=vim;     export EDITOR
-PAGER=less;     export PAGER
-COPY_EXTENDED_ATTRIBUTES_DISABLE=1 ;   export COPY_EXTENDED_ATTRIBUTES_DISABLE
+BLOCKSIZE=K;	export BLOCKSIZE
+EDITOR=vim;   	export EDITOR
+PAGER=less;  	export PAGER
+COPY_EXTENDED_ATTRIBUTES_DISABLE=1;   export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
-ENV=$HOME/.bashrc; export ENV
-if [ -d /u1/app/oracle/OraHome ];then
-    ORACLE_HOME=/u1/app/oracle/OraHome/; export ORACLE_HOME                       
+#ENV=$HOME/.bashrc; export ENV
+if [ -d /u1/app/oracle/OraHome ]; then
+    ORACLE_HOME=/u1/app/oracle/OraHome/; export ORACLE_HOME
     ORACLE_SID=PROD; export ORACLE_SID
 fi
 ULIMIT=unlimited; export ULIMIT
 FTP_PASSIVE=1; export FTP_PASSIVE
 PASSIVE_FTP=1; export PASSIVE_FTP
 
-# load bash_completion scripts
-if [ -d /etc/bash_completion.d ]; then
-    for f in /etc/bash_completion.d/*; do source $f; done
+if [ `which git` ] ; then
+    
 fi
 
 # import custom aliases

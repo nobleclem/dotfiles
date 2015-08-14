@@ -25,11 +25,12 @@ syntax on
 set background=dark
 colorscheme desert
 
-" treat .tpl files as .php files
+" treat files as php files
 au BufRead,BufNewFile *.tpl set filetype=php
 au BufRead,BufNewFile *.module set filetype=php
 au BufRead,BufNewFile *.install set filetype=php
 
+" treat files as javascript files
 au BufRead,BufNewFile *.json set filetype=javascript
 
 au VimEnter * command Cleanup :%s#\(\s\+\|\r\+\)$##
