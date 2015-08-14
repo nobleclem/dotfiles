@@ -81,7 +81,7 @@ for path_dir in $HOME/builds/bin\
                 $HOME/perl
 do
    if [ -d $path_dir ];then
-      PATH="${PATH}:$path_dir"
+    PATH="${PATH}:$path_dir"
    fi
 done
 export PATH
@@ -100,11 +100,34 @@ ULIMIT=unlimited; export ULIMIT
 FTP_PASSIVE=1; export FTP_PASSIVE
 PASSIVE_FTP=1; export PASSIVE_FTP
 
-if [ `which git` ] ; then
-    
+dotfiles="profile.git vimrc"
+dotfilesdir=""
+for file in $dotfiles; do
+    symfile=$(readlink ~/.$file);
+#    echo "$file : $symfile";
+    if [ "$symfile" != "" ]; then
+        tmpdirname=$(dirname $symfile);
+
+#        echo "$dotfilesdir : $tmpdirname";
+        if [ "$dotfilesdir" == "" ] && [ "$tmpdirname" != "" ]; then
+            dotfilesdir=$tmpdirname;
+        fi
+    fi
+done
+if [ `which git` ] && [ "$dotfilesdir" != "" ] && [ -d $dotfilesdir ]; then
+    currdir=$(pwd);
+    cd $dotfilesdir
+
+    LOCAL=$(git rev-parse @)
+    REMOTE=$(git rev-parse @{u})
+    BASE=$(git merge-base @ @{u})
+
+    echo "$LOCAL : $REMOTE : $BASE"
+
+    cd $currdir
 fi
 
 # import custom aliases
 if [ -r ~/.profile.local ] ; then
-  source ~/.profile.local
+    source ~/.profile.local
 fi
