@@ -1,4 +1,6 @@
-alias grep='grep -s --exclude=\*.svn\*'
+# DOTFILES CONFIG VARIABLES
+sourcedotfiles="profile"
+dotfiles="profile vimrc gitconfig gitignore"
 
 case "`uname`" in 
     SunOS)
@@ -46,14 +48,16 @@ set_alias vi  `which vim`
 
 #set command defaults
 alias la='clear && ls -lh'
+alias grep='grep -s --exclude=\*.svn\*'
 
 # add hostname to terminal window
 echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
 
+# change command prompt
 PS1='[\u@\h \W]\$ '
 export PS1
 
-
+# update PATH list
 unset PATH
 for path_dir in $HOME/builds/bin\
                 $HOME/builds/packages/go/bin\
@@ -91,41 +95,85 @@ EDITOR=vim;   	export EDITOR
 PAGER=less;  	export PAGER
 COPY_EXTENDED_ATTRIBUTES_DISABLE=1;   export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
-#ENV=$HOME/.bashrc; export ENV
+# oracle junk
 if [ -d /u1/app/oracle/OraHome ]; then
     ORACLE_HOME=/u1/app/oracle/OraHome/; export ORACLE_HOME
     ORACLE_SID=PROD; export ORACLE_SID
 fi
+
 ULIMIT=unlimited; export ULIMIT
 FTP_PASSIVE=1; export FTP_PASSIVE
 PASSIVE_FTP=1; export PASSIVE_FTP
 
-dotfiles="profile.git vimrc"
+
+### CHECK AND UPDATE DOTFILES ###
+# find git repo
 dotfilesdir=""
+dotfilesbakdir=""
 for file in $dotfiles; do
     symfile=$(readlink ~/.$file);
-#    echo "$file : $symfile";
     if [ "$symfile" != "" ]; then
         tmpdirname=$(dirname $symfile);
 
-#        echo "$dotfilesdir : $tmpdirname";
         if [ "$dotfilesdir" == "" ] && [ "$tmpdirname" != "" ]; then
             dotfilesdir=$tmpdirname;
+            dotfilesbakdir="${dotfilesdir}_bak"
         fi
     fi
 done
+# update dotfiles
 if [ `which git` ] && [ "$dotfilesdir" != "" ] && [ -d $dotfilesdir ]; then
     currdir=$(pwd);
+
+    # move to dotfiles git directory
     cd $dotfilesdir
 
+    # update tracking refs
+    git remote update &> /dev/null
+
+    # get versions
     LOCAL=$(git rev-parse @)
     REMOTE=$(git rev-parse @{u})
-    BASE=$(git merge-base @ @{u})
 
-    echo "$LOCAL : $REMOTE : $BASE"
+    # update required
+    if [ $LOCAL != $REMOTE ]; then
+        echo "=========================="
+        echo "... UPDATING DOTFILES ..."
+        echo "--------------------------"
 
+        git pull
+
+        # re-source files
+        for file in $sourcedotfiles; do
+            source ~/.$file
+        done
+
+        echo ""
+        echo "=========================="
+        echo "DOTFILES HAVE BEEN UPDATED"
+        echo "=========================="
+        echo ""
+    fi
+
+    # check symlinks
+    for file in $dotfiles; do
+        symfile=$(readlink ~/.$file);
+
+        if [ "$symfile" == "" ] || [ "$symfile" != "$dotfilesdir/$file" ]; then
+            if [ ! -d ~/$dotfilesbakdir ]; then
+                mkdir -p ~/$dotfilesbakdir;
+            fi
+
+            mv ~/.$file ~/$dotfilesbakdir/
+
+            ln -s ~/$dotfilesdir/$file ~/.$file
+        fi
+    done
+
+    # go back to previous directory
     cd $currdir
 fi
+
 
 # import custom aliases
 if [ -r ~/.profile.local ] ; then
