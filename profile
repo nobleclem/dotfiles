@@ -106,6 +106,10 @@ FTP_PASSIVE=1; export FTP_PASSIVE
 PASSIVE_FTP=1; export PASSIVE_FTP
 
 
+# load bash_completion scripts
+if [ -d /etc/bash_completion.d ]; then
+    for f in /etc/bash_completion.d/*; do source $f; done
+fi
 
 # import custom aliases (here so we can override for dotfiles updates)
 if [ -r ~/.profile.local ] ; then
