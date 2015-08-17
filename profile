@@ -143,7 +143,7 @@ if [ `which git` ] && [ "$dotfilesdir" != "" ] && [ -d $dotfilesdir ]; then
     git remote update &> /dev/null
 
     # get versions
-    LOCAL=$(git rev-parse @)
+    LOCAL=$(git rev-parse @{0})
     REMOTE=$(git rev-parse @{u})
 
     # update required
