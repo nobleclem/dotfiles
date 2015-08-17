@@ -106,6 +106,13 @@ FTP_PASSIVE=1; export FTP_PASSIVE
 PASSIVE_FTP=1; export PASSIVE_FTP
 
 
+
+# import custom aliases (here so we can override for dotfiles updates)
+if [ -r ~/.profile.local ] ; then
+    source ~/.profile.local
+fi
+
+
 ### CHECK AND UPDATE DOTFILES ###
 # find git repo
 dotfilesdir=""
@@ -155,27 +162,25 @@ if [ `which git` ] && [ "$dotfilesdir" != "" ] && [ -d $dotfilesdir ]; then
         echo ""
     fi
 
+    cd ~
+
     # check symlinks
     for file in $dotfiles; do
-        symfile=$(readlink ~/.$file);
+        symfile=$(readlink .$file);
 
         if [ "$symfile" == "" ] || [ "$symfile" != "$dotfilesdir/$file" ]; then
-            if [ ! -d ~/$dotfilesbakdir ]; then
-                mkdir -p ~/$dotfilesbakdir;
+            if [ -f .$file ]; then
+                if [ ! -d ~/$dotfilesbakdir ]; then
+                    mkdir -p ~/$dotfilesbakdir;
+                fi
+
+                mv .$file $dotfilesbakdir/
             fi
 
-            mv ~/.$file ~/$dotfilesbakdir/
-
-            ln -s ~/$dotfilesdir/$file ~/.$file
+            ln -s $dotfilesdir/$file .$file
         fi
     done
 
     # go back to previous directory
     cd $currdir
-fi
-
-
-# import custom aliases
-if [ -r ~/.profile.local ] ; then
-    source ~/.profile.local
 fi

@@ -33,4 +33,21 @@ au BufRead,BufNewFile *.install set filetype=php
 " treat files as javascript files
 au BufRead,BufNewFile *.json set filetype=javascript
 
+" custom commands
 au VimEnter * command Cleanup :%s#\(\s\+\|\r\+\)$##
+au VimEnter *.php command WinLineEnds :%s/\r//g
+
+" jump to the last position when reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+" Commenting blocks of code.
+autocmd FileType c,cpp,java,scala,php let b:comment_leader = '// '
+autocmd FileType sh,ruby,python   let b:comment_leader = '# '
+autocmd FileType conf,fstab       let b:comment_leader = '# '
+autocmd FileType tex              let b:comment_leader = '% '
+autocmd FileType mail             let b:comment_leader = '> '
+autocmd FileType vim              let b:comment_leader = '" '
+noremap <silent> ,cc :<C-B>silent <C-E>s/^/<C-R>=escape(b:comment_leader,'\/')<CR>/<CR>:nohlsearch<CR>
+noremap <silent> ,cu :<C-B>silent <C-E>s/^\V<C-R>=escape(b:comment_leader,'\/')<CR>//e<CR>:nohlsearch<CR>
