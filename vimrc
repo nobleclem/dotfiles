@@ -14,7 +14,7 @@ set term=ansi
 " no search highlight
 set nohlsearch
 
-set viminfo='20,<200,s10,h
+" set viminfo='20,<200,s10,h
 
 set pastetoggle=<F5>
 
