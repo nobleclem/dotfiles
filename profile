@@ -49,6 +49,7 @@ set_alias vi  `which vim`
 #set command defaults
 alias la='clear && ls -lh'
 alias grep='grep -s --exclude=\*.svn\*'
+alias wget='wget --content-disposition'
 
 # add hostname to terminal window
 echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
