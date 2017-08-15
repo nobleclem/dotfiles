@@ -29,6 +29,9 @@ export TERM;
 
 stty erase 
 
+# enable ctrl-a/e line cursor move endings
+set -o emacs
+
 
 function set_alias {
   local alias_name=$1
