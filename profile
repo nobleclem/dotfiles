@@ -32,13 +32,42 @@ stty erase 
 # enable ctrl-a/e line cursor move endings
 set -o emacs
 
+# add hostname to terminal window
+echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
+
+# change command prompt
+PS1='[\u@\h \W]\$ '
+export PS1
+
+# update PATH list
+unset PATH
+for pathDir in $HOME/builds/bin\
+               $HOME/builds/packages/go/bin\
+               /usr/local/bin\
+               /sbin\
+               /bin\
+               /usr/sbin\
+               /usr/bin\
+               /usr/local/sbin\
+               /usr/local/bin\
+               /usr/local/mysql/bin\
+               $HOME/bin
+do
+    if [ -d $pathDir ];then
+        if [ "${PATH}" != "" ]; then
+            PATH="${PATH}:";
+        fi
+        PATH="${PATH}$pathDir"
+    fi
+done
+export PATH
 
 function set_alias {
-  local alias_name=$1
-  local alias_path=$2
+  local aliasName=$1
+  local aliasPath=$2
 
-  if [ -x $alias_path ];  then
-      alias $alias_name=$alias_path
+  if [ -x $aliasPath ];  then
+      alias $aliasName=$aliasPath
   fi
 }
 
@@ -54,66 +83,23 @@ alias la='clear && ls -lh'
 alias grep='grep -s --exclude=\*.svn\*'
 alias wget='wget --content-disposition'
 
-# add hostname to terminal window
-echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
-
-# change command prompt
-PS1='[\u@\h \W]\$ '
-export PS1
-
-# update PATH list
-unset PATH
-for path_dir in $HOME/builds/bin\
-                $HOME/builds/packages/go/bin\
-                /usr/local/bin\
-                /sbin\
-                /bin\
-                /usr/sbin\
-                /usr/bin\
-                /usr/ucb\
-                /usr/ccs/bin\
-                /usr/games\
-                /usr/sfw/bin\
-                /opt/local/sbin\
-                /opt/local/bin\
-                /usr/local/sbin\
-                /usr/local/bin\
-                /usr/X11R6/bin\
-                /usr/openwin/bin\
-                /home/oracle/9.2/bin\
-                /usr/local/mysql/bin\
-                /usr/dt/bin\
-                /opt/VRTS/bin\
-                /opt/CA/SharedComponents/bin\
-                $HOME/bin\
-                $HOME/perl
-do
-   if [ -d $path_dir ];then
-    PATH="${PATH}:$path_dir"
-   fi
-done
-export PATH
-
 BLOCKSIZE=K;	export BLOCKSIZE
 EDITOR=vim;   	export EDITOR
 PAGER=less;  	export PAGER
 COPY_EXTENDED_ATTRIBUTES_DISABLE=1;   export COPY_EXTENDED_ATTRIBUTES_DISABLE
 
 # oracle junk
-if [ -d /u1/app/oracle/OraHome ]; then
-    ORACLE_HOME=/u1/app/oracle/OraHome/; export ORACLE_HOME
-    ORACLE_SID=PROD; export ORACLE_SID
-fi
+#if [ -d /u1/app/oracle/OraHome ]; then
+#    ORACLE_HOME=/u1/app/oracle/OraHome/; export ORACLE_HOME
+#    ORACLE_SID=PROD; export ORACLE_SID
+#fi
 
 ULIMIT=unlimited; export ULIMIT
-FTP_PASSIVE=1; export FTP_PASSIVE
-PASSIVE_FTP=1; export PASSIVE_FTP
-
 
 # load bash_completion scripts
-if [ -d /etc/bash_completion.d ]; then
-    for f in /etc/bash_completion.d/*; do source $f; done
-fi
+#if [ -d /etc/bash_completion.d ]; then
+#    for f in /etc/bash_completion.d/*; do source $f; done
+#fi
 
 # import custom aliases (here so we can override for dotfiles updates)
 if [ -r ~/.profile.local ] ; then
