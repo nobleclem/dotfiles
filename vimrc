@@ -25,6 +25,8 @@ au FileType * set formatoptions-=r
 syntax on
 set background=dark
 colorscheme desert
+" fix syntax highlighting bug: https://vim.fandom.com/wiki/Fix_syntax_highlighting
+autocmd BufEnter * :syntax sync fromstart
 
 " treat files as php files
 au BufRead,BufNewFile *.tpl set filetype=php
