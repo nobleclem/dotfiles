@@ -1,6 +1,6 @@
 # DOTFILES CONFIG VARIABLES
 sourcedotfiles="profile"
-dotfiles="profile vimrc gitconfig gitignore"
+dotfiles="profile vimrc gitconfig gitignore zshrc"
 
 case "`uname`" in 
     SunOS)
@@ -38,6 +38,9 @@ echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
 # change command prompt
 PS1='[\u@\h \W]\$ '
 export PS1
+# zsh command prompt
+PROMPT='[%n@%m %1~]$ '
+export PROMPT
 
 # update PATH list
 unset PATH
