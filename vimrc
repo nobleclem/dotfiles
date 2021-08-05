@@ -3,6 +3,8 @@ set shiftwidth=4
 set softtabstop=4
 set tabstop=4
 
+set scrolloff=4  " Keep 4 lines above and below the cursor
+
 set autoindent
 set expandtab
 set ruler
@@ -10,6 +12,9 @@ set ruler
 set nottyfast
 
 set term=ansi
+
+set title
+set titlestring=%t%(\ %M%)%(\ (%{expand(\"%:~:.:h\")})%)%(\ %a%)
 
 " no search highlight
 set nohlsearch
