@@ -1,5 +1,5 @@
 [core]
-	excludesfile = /Users/stubbe/.gitignore
+	excludesfile = ~/.gitignore
 [user]
 	name = Patrick Springstubbe
 	email = pat@springstubbe.us
