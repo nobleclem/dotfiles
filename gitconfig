@@ -3,6 +3,8 @@
 [user]
 	name = Patrick Springstubbe
 	email = pat@springstubbe.us
+[pull]
+    rebase = false
 [push]
 	default = matching
 [filter "lfs"]
