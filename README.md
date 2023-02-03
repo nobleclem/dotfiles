@@ -5,7 +5,7 @@ My server environment dotfiles with autoupdate functionality upon server login.
 ## Setup
 ```
 cd ~
-git clone https://github.com/nobleclem/dotfiles.git
+git clone ssh://git@github.com/nobleclem/dotfiles.git
 mv .profile .profile-bak
 ln -s dotfiles/profile .profile
 source .profile
