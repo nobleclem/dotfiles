@@ -29,8 +29,15 @@ export TERM;
 
 stty erase 
 
-# enable ctrl-a/e line cursor move endings
-set -o emacs
+# SHELL SPECIFICS
+case "`basename $SHELL`" in
+    ash)
+        ;;
+    *)
+        # enable ctrl-a/e line cursor move endings
+        set -o emacs
+        ;;
+esac;
 
 # add hostname to terminal window
 echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
@@ -69,7 +76,7 @@ function set_alias {
   local aliasName=$1
   local aliasPath=$2
 
-  if [ -x $aliasPath ];  then
+  if [[ $aliasPath != "" && -x $aliasPath ]];  then
       alias $aliasName=$aliasPath
   fi
 }
@@ -83,7 +90,7 @@ set_alias vi  `which vim`
 
 #set command defaults
 alias la='clear && ls -lh'
-alias grep='grep -s --exclude=\*.svn\*'
+alias grep='grep -s'
 alias wget='wget --content-disposition'
 
 BLOCKSIZE=K;	export BLOCKSIZE
