@@ -45,6 +45,16 @@ au BufRead,BufNewFile *.json set filetype=javascript
 au VimEnter * command Cleanup :%s#\(\s\+\|\r\+\)$##
 au VimEnter *.php command WinLineEnds :%s/\r//g
 
+fun! Usetabs()
+    let l:spaces = repeat(' ', &tabstop)
+    execute '%substitute#^\%(' . l:spaces . '\)\+#\=repeat("\t", len(submatch(0)) / &tabstop)#e'
+endfun
+
+fun! Usespaces()
+    let l:spaces = repeat(' ', &tabstop)
+    execute '%substitute#^\%(\t\)\+#\=repeat("' . l:spaces . '", len(submatch(0)))#e'
+endfun
+
 " jump to the last position when reopening a file
 if has("autocmd")
   au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
