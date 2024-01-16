@@ -42,11 +42,20 @@ esac;
 # add hostname to terminal window
 echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
 
+# used for determing current git branch
+git_branch_prompt() {
+    local branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
+    if [ -n "${branch}" ]; then
+        echo "($branch)";
+    fi
+}
+
 # change command prompt
-PS1='[\u@\h \W]\$ '
+PS1='[\u@\h \W]$(git_branch_prompt)\$ '
 export PS1
 # zsh command prompt
-PROMPT='[%n@%m %1~]$ '
+setopt PROMPT_SUBST
+PROMPT='[%n@%m %1~]$(git_branch_prompt)$ '
 export PROMPT
 
 # update PATH list
