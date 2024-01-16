@@ -44,7 +44,7 @@ echo -ne "\033]0;`hostname|cut -f1 -d\.`\007"
 
 # used for determing current git branch
 git_branch_prompt() {
-    local branch=$(git symbolic-ref HEAD 2> /dev/null | cut -d'/' -f3)
+    local branch=$(git symbolic-ref --short HEAD 2> /dev/null)
     if [ -n "${branch}" ]; then
         echo "($branch)";
     fi
