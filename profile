@@ -54,7 +54,9 @@ git_branch_prompt() {
 PS1='[\u@\h \W]$(git_branch_prompt)\$ '
 export PS1
 # zsh command prompt
-setopt PROMPT_SUBST
+if [[ `basename $SHELL` == 'zsh' ]]; then
+    setopt PROMPT_SUBST
+fi
 PROMPT='[%n@%m %1~]$(git_branch_prompt)$ '
 export PROMPT
 
